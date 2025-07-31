@@ -14,9 +14,9 @@ glimpse(data2)
 data2=select(data, jj13.2, jh5, j_marst, j_diplom, status, jj6.2, j_age, j_educ, jj1.1.2 )
 data2= na.omit(data2)
 
-#элементы нормализации
+#СЌР»РµРјРµРЅС‚С‹ РЅРѕСЂРјР°Р»РёР·Р°С†РёРё
 
-#зарплата
+#Р·Р°СЂРїР»Р°С‚Р°
 data2$jj13.2
 sal = as.numeric(data2$jj13.2)
 sal1 = as.character(data2$jj13.2)
@@ -26,7 +26,7 @@ mean(sal)
 data2["salary"]=(sal-mean(sal))/(sqrt(var(sal)))
 data2["salary"]
 
-#продолжительность рабочей недели
+#РїСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚СЊ СЂР°Р±РѕС‡РµР№ РЅРµРґРµР»Рё
 data2$jj6.2
 work = as.numeric(data2$jj6.2)
 work1 = as.character(data2$jj6.2)
@@ -36,7 +36,7 @@ mean(work)
 data2["workweek"]=(work-mean(work))/(sqrt(var(work)))
 data2["workweek"]
 
-#возраст
+#РІРѕР·СЂР°СЃС‚
 data2$j_age
 age = as.numeric(data2$j_age)
 age1 = as.character(data2$j_age)
@@ -46,13 +46,13 @@ mean(age)
 data2["age"]=(age-mean(age))/(sqrt(var(age)))
 data2["age"]
 
-#пол
+#РїРѕР»
 data2["sex"]=data2$jh5
 data2$sex = as.numeric(data2$sex)
 data2$sex[which(data2$sex!='1')]<-0
 data2["sex"]
 
-#наличие высшего образования
+#РЅР°Р»РёС‡РёРµ РІС‹СЃС€РµРіРѕ РѕР±СЂР°Р·РѕРІР°РЅРёСЏ
 data2["j_educ"] = data2$j_educ 
 data2$j_educ = as.numeric(data2$j_educ)
 data2["j_educ"] = lapply(data2$j_educ, as.character) 
@@ -63,7 +63,7 @@ data2$j_educ[which(data2$j_educ=='23')] <- 1
 data2$j_educ[which(data2$j_educ!='1')] <- 0
 data2$j_educ
 
-#населенный пункт 
+#РЅР°СЃРµР»РµРЅРЅС‹Р№ РїСѓРЅРєС‚ 
 data2["status2"]=data2$status 
 data2$status2 = as.numeric(data2$status2)
 data2$status2[which(data2$status2=='1')] <- 1 
@@ -71,7 +71,7 @@ data2$status2[which(data2$status2=='2')] <- 1
 data2$status2[which(data2$status2!='1')] <- 0
 data2["status2"]
 
-#семейное положение
+#СЃРµРјРµР№РЅРѕРµ РїРѕР»РѕР¶РµРЅРёРµ
 data2["wed1"]= data2$j_marst 
 data2$wed1 = as.numeric(data2$wed1)
 data2["wed1"] = lapply(data2$j_marst, as.character) 
@@ -94,7 +94,7 @@ data2$wed3 = as.numeric(data2$wed3)
 data2$wed3[which(data2$wed3!='1')] <- 0
 data2$wed3
 
-#удовлетворенность условиями труда
+#СѓРґРѕРІР»РµС‚РІРѕСЂРµРЅРЅРѕСЃС‚СЊ СѓСЃР»РѕРІРёСЏРјРё С‚СЂСѓРґР°
 data2["satisfy1"] = data2$jj1.1.2 
 data2$satisfy1 = as.numeric(data2$satisfy1) 
 data2$satisfy1[which(data2$satisfy1=="1")] <- 1 
@@ -110,262 +110,262 @@ data2$satisfy2[which(data2$satisfy2=="5")] <- 1
 data2$satisfy2[which(data2$satisfy2!="1")] <- 0
 data2$satisfy2
 
-#линейная регрессия зарплаты на все параметры
+#Р»РёРЅРµР№РЅР°СЏ СЂРµРіСЂРµСЃСЃРёСЏ Р·Р°СЂРїР»Р°С‚С‹ РЅР° РІСЃРµ РїР°СЂР°РјРµС‚СЂС‹
 model1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2) 
 summary(model1) 
 vif(model1)
-#коэффициент вздутия дисперсии VIF для всех регрессоров хороший
+#РєРѕСЌС„С„РёС†РёРµРЅС‚ РІР·РґСѓС‚РёСЏ РґРёСЃРїРµСЂСЃРёРё VIF РґР»СЏ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ С…РѕСЂРѕС€РёР№
 #R-squared: 0.1827 
 
-#введем степени
+#РІРІРµРґРµРј СЃС‚РµРїРµРЅРё
 
 model2 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.1))) 
 summary(model2) 
 vif(model2)
-# R-squared: 0.2181 - повысился, vif приемлемый
+# R-squared: 0.2181 - РїРѕРІС‹СЃРёР»СЃСЏ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model3 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.1))) 
 summary(model3) 
 vif(model3)
-# R-squared снизился, но не сильно, звёздочек у доп регрессоров не много, vif приемлемый
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, Р·РІС‘Р·РґРѕС‡РµРє Сѓ РґРѕРї СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РЅРµ РјРЅРѕРіРѕ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model4 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.1)) + I(age^(0.1))) 
 summary(model4) 
 vif(model4)
-# R-squared снизился, но не сильно, звёздочек у доп регрессоров не много, vif приемлемый
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, Р·РІС‘Р·РґРѕС‡РµРє Сѓ РґРѕРї СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РЅРµ РјРЅРѕРіРѕ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model5 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.2))) 
 summary(model5) 
 vif(model5)
-# R-squared снизился, но не сильно, звёздочек у доп регрессоров не много, vif приемлемый
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, Р·РІС‘Р·РґРѕС‡РµРє Сѓ РґРѕРї СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РЅРµ РјРЅРѕРіРѕ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model6 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.2))) 
 summary(model6) 
 vif(model6)
-# R-squared: 0.2182 - повысился, vif приемлемый
+# R-squared: 0.2182 - РїРѕРІС‹СЃРёР»СЃСЏ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model7 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.2)) + I(age^(0.2))) 
 summary(model7) 
 vif(model7)
-# R-squared снизился, но не сильно, звёздочек у доп регрессоров не много, vif приемлемый
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, Р·РІС‘Р·РґРѕС‡РµРє Сѓ РґРѕРї СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РЅРµ РјРЅРѕРіРѕ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model8 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.3))) 
 summary(model8) 
 vif(model8)
-# R-squared снизился, vif приближается к 10
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif РїСЂРёР±Р»РёР¶Р°РµС‚СЃСЏ Рє 10
 
 model9 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.3))) 
 summary(model9) 
 vif(model9)
-# R-squared: 0.2183 - повысился, vif приемлемый
+# R-squared: 0.2183 - РїРѕРІС‹СЃРёР»СЃСЏ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model10 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.3)) + I(age^(0.3))) 
 summary(model10) 
 vif(model10)
-# R-squared снизился, но не сильно, звёздочек у доп регрессоров не много, vif приближается к 10
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, Р·РІС‘Р·РґРѕС‡РµРє Сѓ РґРѕРї СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РЅРµ РјРЅРѕРіРѕ, vif РїСЂРёР±Р»РёР¶Р°РµС‚СЃСЏ Рє 10
 
 model11 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.4))) 
 summary(model11) 
 vif(model11)
-# R-squared снизился, но не сильно, vif > 10
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, vif > 10
 
-#лучшая модель среди степеней
+#Р»СѓС‡С€Р°СЏ РјРѕРґРµР»СЊ СЃСЂРµРґРё СЃС‚РµРїРµРЅРµР№
 model12 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.4))) 
 summary(model12) 
 vif(model12)
-# R-squared: 0.2184 - повысился, но vif приближается к 10
+# R-squared: 0.2184 - РїРѕРІС‹СЃРёР»СЃСЏ, РЅРѕ vif РїСЂРёР±Р»РёР¶Р°РµС‚СЃСЏ Рє 10
 
 model13 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.4)) + I(age^(0.4))) 
 summary(model13) 
 vif(model13)
-# R-squared снизился, vif > 10, увеличивать, дальше, скорее всего, нет смысла
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif > 10, СѓРІРµР»РёС‡РёРІР°С‚СЊ, РґР°Р»СЊС€Рµ, СЃРєРѕСЂРµРµ РІСЃРµРіРѕ, РЅРµС‚ СЃРјС‹СЃР»Р°
 
 model14 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.5))) 
 summary(model14) 
 vif(model14)
-# R-squared снизился, vif большой
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif Р±РѕР»СЊС€РѕР№
 
 model15 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.5))) 
 summary(model15) 
 vif(model15)
-# R-squared: 0.2185 - повысился, но vif > 10
+# R-squared: 0.2185 - РїРѕРІС‹СЃРёР»СЃСЏ, РЅРѕ vif > 10
 
 model16 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(0.5)) + I(age^(0.5))) 
 summary(model16) 
 vif(model16)
-# R-squared снизился, vif большой
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif Р±РѕР»СЊС€РѕР№
 
-#значит, для степеней 0<n< 1: чем ближе степень к единице, тем хуже становится vif. Начиная со степени 0.4 vif уже
-#начиная со степени 0.4 vif очень большим, модели становятся только хуже
+#Р·РЅР°С‡РёС‚, РґР»СЏ СЃС‚РµРїРµРЅРµР№ 0<n< 1: С‡РµРј Р±Р»РёР¶Рµ СЃС‚РµРїРµРЅСЊ Рє РµРґРёРЅРёС†Рµ, С‚РµРј С…СѓР¶Рµ СЃС‚Р°РЅРѕРІРёС‚СЃСЏ vif. РќР°С‡РёРЅР°СЏ СЃРѕ СЃС‚РµРїРµРЅРё 0.4 vif СѓР¶Рµ
+#РЅР°С‡РёРЅР°СЏ СЃРѕ СЃС‚РµРїРµРЅРё 0.4 vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РёРј, РјРѕРґРµР»Рё СЃС‚Р°РЅРѕРІСЏС‚СЃСЏ С‚РѕР»СЊРєРѕ С…СѓР¶Рµ
 
 model17 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.1))) 
 summary(model17) 
 vif(model17)
-# R-squared снизился, но не сильно, vif очень большой
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№
 
 model18 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(1.1))) 
 summary(model18) 
 vif(model18)
-# R-squared: 0.2191 - повысился, но vif очень большой
+# R-squared: 0.2191 - РїРѕРІС‹СЃРёР»СЃСЏ, РЅРѕ vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№
 
 model19 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.1)) + I(age^(1.1))) 
 summary(model19) 
 vif(model19)
-# R-squared снизился, vif очень большой
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№
 
 model20 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.2))) 
 summary(model20) 
 vif(model20)
-# R-squared снизился, но не сильно, vif очень большой
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№
 
 model21 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(1.2))) 
 summary(model21) 
 vif(model21)
-# R-squared: 0.2192 - повысился, но vif очень большой
+# R-squared: 0.2192 - РїРѕРІС‹СЃРёР»СЃСЏ, РЅРѕ vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№
 
 model22 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.2)) + I(age^(1.2))) 
 summary(model22) 
 vif(model22)
-# R-squared снизился, vif очень большой
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№
 
 model23 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.3))) 
 summary(model23) 
 vif(model23)
-# R-squared снизился, vif большой, но по сравнению с прошлой моделью уменьшился
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif Р±РѕР»СЊС€РѕР№, РЅРѕ РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ РїСЂРѕС€Р»РѕР№ РјРѕРґРµР»СЊСЋ СѓРјРµРЅСЊС€РёР»СЃСЏ
 
 model24 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(1.3))) 
 summary(model24) 
 vif(model24)
-# R-squared: 0.2192 - повысился, vif большой, но по сравнению с прошлой моделью уменьшился
+# R-squared: 0.2192 - РїРѕРІС‹СЃРёР»СЃСЏ, vif Р±РѕР»СЊС€РѕР№, РЅРѕ РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ РїСЂРѕС€Р»РѕР№ РјРѕРґРµР»СЊСЋ СѓРјРµРЅСЊС€РёР»СЃСЏ
 
 model25 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.3)) + I(age^(1.3))) 
 summary(model25) 
 vif(model25)
-# R-squared снизился, vif очень большой, но по сравнению с прошлой моделью уменьшился
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif РѕС‡РµРЅСЊ Р±РѕР»СЊС€РѕР№, РЅРѕ РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ РїСЂРѕС€Р»РѕР№ РјРѕРґРµР»СЊСЋ СѓРјРµРЅСЊС€РёР»СЃСЏ
 
 model26 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.4))) 
 summary(model26) 
 vif(model26)
-# R-squared снизился, но не сильно, vif большой, но снижается
+# R-squared СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ, vif Р±РѕР»СЊС€РѕР№, РЅРѕ СЃРЅРёР¶Р°РµС‚СЃСЏ
 
 model27 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(1.4))) 
 summary(model27) 
 vif(model27)
-# R-squared: 0.2193 - повысился, но vif большой
+# R-squared: 0.2193 - РїРѕРІС‹СЃРёР»СЃСЏ, РЅРѕ vif Р±РѕР»СЊС€РѕР№
 
 model28 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.4)) + I(age^(1.4))) 
 summary(model28) 
 vif(model28)
-# R-squared снизился, vif большой, снижается
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif Р±РѕР»СЊС€РѕР№, СЃРЅРёР¶Р°РµС‚СЃСЏ
 
 model29 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.9))) 
 summary(model29) 
 vif(model29)
-# R-squared снизился, vif приемлемый
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model30 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(2))) 
 summary(model30) 
 vif(model30)
-# R-squared: 0.1949 - понизился, но vif приемлемый
+# R-squared: 0.1949 - РїРѕРЅРёР·РёР»СЃСЏ, РЅРѕ vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model31 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(1.9)) + I(age^(1.9))) 
 summary(model31) 
 vif(model31)
-# R-squared снизился, vif > 10
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif > 10
 
 model32 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(workweek^(2)) + I(age^(2))) 
 summary(model32) 
 vif(model32)
-# R-squared снизился, vif в норме
+# R-squared СЃРЅРёР·РёР»СЃСЏ, vif РІ РЅРѕСЂРјРµ
 
-#лучшая модель среди степеней
+#Р»СѓС‡С€Р°СЏ РјРѕРґРµР»СЊ СЃСЂРµРґРё СЃС‚РµРїРµРЅРµР№
 model12 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.4))) 
 summary(model12) 
 vif(model12)
-# R-squared: 0.2184 - выше первоначальной модели, vif < 10
+# R-squared: 0.2184 - РІС‹С€Рµ РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅРѕР№ РјРѕРґРµР»Рё, vif < 10
 
-#введем логарифмы
+#РІРІРµРґРµРј Р»РѕРіР°СЂРёС„РјС‹
 
 model33 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(log(workweek)) + I(log(age))) 
 summary(model33) 
 vif(model33)
-# R-squared:  0.1733 снизился, vif приемлемый
+# R-squared:  0.1733 СЃРЅРёР·РёР»СЃСЏ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model34 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(log(workweek))) 
 summary(model34) 
 vif(model34)
-# R-squared:  0.1564 снизился, vif приемлемый
+# R-squared:  0.1564 СЃРЅРёР·РёР»СЃСЏ, vif РїСЂРёРµРјР»РµРјС‹Р№
 
-#лучшая среди логарифмов 
+#Р»СѓС‡С€Р°СЏ СЃСЂРµРґРё Р»РѕРіР°СЂРёС„РјРѕРІ 
 model35 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(log(age))) 
 summary(model35)
 vif(model35)
-# R-squared:  0.218, vif приемлемый
+# R-squared:  0.218, vif РїСЂРёРµРјР»РµРјС‹Р№
 
-#сравнение лучших моделей
+#СЃСЂР°РІРЅРµРЅРёРµ Р»СѓС‡С€РёС… РјРѕРґРµР»РµР№
 
 model1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2) 
 summary(model1) 
 vif(model1)
 #Multiple R-squared:  0.1855,	Adjusted R-squared:  0.1827 
-#попробуем убрать satisfy2
-#vif хороший у всех регрессоров
+#РїРѕРїСЂРѕР±СѓРµРј СѓР±СЂР°С‚СЊ satisfy2
+#vif С…РѕСЂРѕС€РёР№ Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ
 
 model1.1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1+ wed2 + wed3 + satisfy1) 
 summary(model1.1) 
 vif(model1.1)
-#Multiple R-squared:  0.1842,	Adjusted R-squared:  0.1817  - снизился, но не сильно
-#vif хороший у всех регрессоров
+#Multiple R-squared:  0.1842,	Adjusted R-squared:  0.1817  - СЃРЅРёР·РёР»СЃСЏ, РЅРѕ РЅРµ СЃРёР»СЊРЅРѕ
+#vif С…РѕСЂРѕС€РёР№ Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ
 
 model6 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.2))) 
 summary(model6) 
 vif(model6)
-#Multiple R-squared:  0.2237,	Adjusted R-squared:  0.2182  - выше, чем у предыдущей модели
-#vif у всех регрессоров < 5
-#попробуем убрать satisfy2
+#Multiple R-squared:  0.2237,	Adjusted R-squared:  0.2182  - РІС‹С€Рµ, С‡РµРј Сѓ РїСЂРµРґС‹РґСѓС‰РµР№ РјРѕРґРµР»Рё
+#vif Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ < 5
+#РїРѕРїСЂРѕР±СѓРµРј СѓР±СЂР°С‚СЊ satisfy2
 
 model6.1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + I(age^(0.2)))
 summary(model6.1) 
 vif(model6.1)
-#Multiple R-squared:  0.222,	Adjusted R-squared:  0.2169  - незначительно сниился по сравнению с предыдущей моделью 6
-#vif у всех регрессоров < 5
+#Multiple R-squared:  0.222,	Adjusted R-squared:  0.2169  - РЅРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕ СЃРЅРёРёР»СЃСЏ РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ РїСЂРµРґС‹РґСѓС‰РµР№ РјРѕРґРµР»СЊСЋ 6
+#vif Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ < 5
 
 model12 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(age^(0.4))) 
 summary(model12) 
 vif(model12)
-# R-squared: 0.224, но vif приближается к 10
-#Multiple R-squared:  0.224,	Adjusted R-squared:  0.2184 - повысился относительно модели 1
-#попробуем убрать satisfy2
-#vif увеличился у регрессоров age и I(age^(0.4))
+# R-squared: 0.224, РЅРѕ vif РїСЂРёР±Р»РёР¶Р°РµС‚СЃСЏ Рє 10
+#Multiple R-squared:  0.224,	Adjusted R-squared:  0.2184 - РїРѕРІС‹СЃРёР»СЃСЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РјРѕРґРµР»Рё 1
+#РїРѕРїСЂРѕР±СѓРµРј СѓР±СЂР°С‚СЊ satisfy2
+#vif СѓРІРµР»РёС‡РёР»СЃСЏ Сѓ СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ age Рё I(age^(0.4))
 
 model12.1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + + wed1 + wed2 + wed3+ satisfy1 + I(age^(0.4))) 
 summary(model12.1) 
 vif(model12.1)
-#Multiple R-squared:  0.2222,	Adjusted R-squared:  0.2171 - незначительно снизился относительно модели 12 
-#почти у всех регрессоров по 3 звездочки
+#Multiple R-squared:  0.2222,	Adjusted R-squared:  0.2171 - РЅРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕ СЃРЅРёР·РёР»СЃСЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РјРѕРґРµР»Рё 12 
+#РїРѕС‡С‚Рё Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РїРѕ 3 Р·РІРµР·РґРѕС‡РєРё
 
 model35 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + satisfy2 + I(log(age))) 
 summary(model35)
 vif(model35)
 #Multiple R-squared:  0.2236,	Adjusted R-squared:  0.218 
-#попробуем убрать satisfy2
-#у доп регрессоров мало звёздочек
-#vif приемлемый
+#РїРѕРїСЂРѕР±СѓРµРј СѓР±СЂР°С‚СЊ satisfy2
+#Сѓ РґРѕРї СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РјР°Р»Рѕ Р·РІС‘Р·РґРѕС‡РµРє
+#vif РїСЂРёРµРјР»РµРјС‹Р№
 
 model35.1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 +  wed1 + wed2 + wed3 + satisfy1 + I(log(age))) 
 summary(model35.1)
 vif(model35.1)
-# R-squared:  0.218, vif приемлемый
-#Multiple R-squared:  0.2218,	Adjusted R-squared:  0.2167  - незначительно снизился относительно модели 35
-#почти у всех регрессоров по 3 звездочки
-#vif приемлемый
+# R-squared:  0.218, vif РїСЂРёРµРјР»РµРјС‹Р№
+#Multiple R-squared:  0.2218,	Adjusted R-squared:  0.2167  - РЅРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕ СЃРЅРёР·РёР»СЃСЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РјРѕРґРµР»Рё 35
+#РїРѕС‡С‚Рё Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РїРѕ 3 Р·РІРµР·РґРѕС‡РєРё
+#vif РїСЂРёРµРјР»РµРјС‹Р№
 
-#лучшая модель, поскольку vif у всех регрессоров приемлемый, почти у всех регрессоров по 3 звездочки, и Adjusted R-squared:  0.2169 - один из самых высоких в представленных моделях
+#Р»СѓС‡С€Р°СЏ РјРѕРґРµР»СЊ, РїРѕСЃРєРѕР»СЊРєСѓ vif Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РїСЂРёРµРјР»РµРјС‹Р№, РїРѕС‡С‚Рё Сѓ РІСЃРµС… СЂРµРіСЂРµСЃСЃРѕСЂРѕРІ РїРѕ 3 Р·РІРµР·РґРѕС‡РєРё, Рё Adjusted R-squared:  0.2169 - РѕРґРёРЅ РёР· СЃР°РјС‹С… РІС‹СЃРѕРєРёС… РІ РїСЂРµРґСЃС‚Р°РІР»РµРЅРЅС‹С… РјРѕРґРµР»СЏС…
 model6.1 =lm(data = data2, salary ~ workweek + age + sex + j_educ + status2 + wed1 + wed2 + wed3 + satisfy1 + I(age^(0.2)))
 summary(model6.1) 
 vif(model6.1)
 
-#мужчины, разведённые с высшим образованием 
+#РјСѓР¶С‡РёРЅС‹, СЂР°Р·РІРµРґС‘РЅРЅС‹Рµ СЃ РІС‹СЃС€РёРј РѕР±СЂР°Р·РѕРІР°РЅРёРµРј 
 data3=subset(data2,sex==1)
 data3
 
@@ -379,7 +379,7 @@ model_subset1 =lm(data = data5, salary ~ workweek + age + status2 + satisfy1 + I
 summary(model_subset1) 
 vif(model_subset1)
 
-#женщины, живущие в городе, состоящие в браке
+#Р¶РµРЅС‰РёРЅС‹, Р¶РёРІСѓС‰РёРµ РІ РіРѕСЂРѕРґРµ, СЃРѕСЃС‚РѕСЏС‰РёРµ РІ Р±СЂР°РєРµ
 data6=subset(data2,sex==0)
 data6
 
